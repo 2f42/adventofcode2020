@@ -16,7 +16,7 @@ def read_input(fname="input.txt"):
                 col_rules[k] = v
     return col_rules
 
-## pls ignore this, its an actual mess, ill fix later
+## pls ignore this, its an actual mess, i fixed, look at part1 instead
 def search(inp, target="shiny gold"):
     successes = []
     failures = []
@@ -42,6 +42,16 @@ def search(inp, target="shiny gold"):
             else:
                 failures.append(cur_cols.pop())
     return len(successes)
+## in all honesty, idk why i insisted on forcing myself to write an iterative
+## solution to a problem which is **way easier** through recursion
+## i think i may have been thinking of pruning the search tree for some reason
+## as if this code was running on old hardware for hours
+
+def part1(inp, current, target="shiny gold"):
+    if target in inp[current]:
+        return 1
+    else:
+        return 1 if 1 in (part1(inp, b, target) for b in inp[current]) else 0
 
 def part2(inp, startpoint="shiny gold"):
     total = 1
@@ -49,5 +59,6 @@ def part2(inp, startpoint="shiny gold"):
         total += inp[startpoint][bag] * part2(inp, bag)
     return total
 
-print("part1:\t", search(read_input()))
-print("part2:\t", part2(read_input())-1) ## <-- this -1 wasted 15 minutes of my life
+rules = read_input()
+print("part1:\t", sum(part1(rules, bag) for bag in rules))
+print("part2:\t", part2(rules)-1) ## <-- this -1 wasted 15 minutes of my life
