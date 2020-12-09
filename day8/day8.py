@@ -23,7 +23,7 @@ class Computer:
         self.opcodes[opcode](self, arg)
         self.pointer += 1
 
-    def __call__(self, fname="input.txt"):
+    def read_input(self, fname="input.txt"):
         self.instructions = []
         with open(fname) as f:
             for line in f.readlines():
@@ -59,8 +59,8 @@ class Computer:
         self.pointer += arg-1
     opcodes["jmp"] = _jmp
 
-c = Computer()
-for i in c():
+handheld_console = Computer()
+for c in handheld_console.read_input():
     pass
-print(c.accumulator)
-print(c.attempt_repair())
+print(handheld_console.accumulator)
+print(handheld_console.attempt_repair())
