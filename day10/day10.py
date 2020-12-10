@@ -23,11 +23,10 @@ def find_all_chains(adapters):
     for adapter in adapters:
         chains[adapter] = 0
         for i in range(3):
-            if adapter-i-1 not in chains: ## this adapter doesnt exist
-                chains[adapter-i-1] = 0   ## so you cant get to it
-            chains[adapter] += chains[adapter-i-1]
-            ## number of chains to this adapter is the sum of the
-            ## number of chains to each adapter able to connect to it
+            if adapter-i-1 in chains:
+                chains[adapter] += chains[adapter-i-1]
+                ## number of chains to this adapter is the sum of the
+                ## number of chains to each adapter able to connect to it
     return chains[max(adapters)]
 
 inp = read_input()
