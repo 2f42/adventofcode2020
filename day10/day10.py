@@ -5,7 +5,9 @@ def read_input(fname="input.txt"):
             out.append(int(line.strip()))
     return out
 
-def find_jolt_chain(adapters, start, target):
+def find_jolt_chain(adapters):
+    start = 0
+    target = max(adapters)
     diffs = [0,0,1]
     while start != target:
         for i in range(3):
@@ -13,8 +15,6 @@ def find_jolt_chain(adapters, start, target):
                 diffs[i] += 1
                 start += i+1
                 break
-        else:
-            return False
     return diffs
 
 def find_all_chains(adapters):
@@ -31,7 +31,7 @@ def find_all_chains(adapters):
     return chains[max(adapters)]
 
 inp = read_input()
-diffs = find_jolt_chain(inp, 0, max(inp))
+diffs = find_jolt_chain(inp)
 print(diffs[0] * diffs[2])
 chains = find_all_chains(inp)
 print(chains)
