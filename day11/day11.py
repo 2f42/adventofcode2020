@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 def read_input(fname="input.txt"):
     out = []
     with open(fname) as f:
@@ -39,26 +37,30 @@ def count_blockers(seats, w, h, x, y):
             count += can_see_occupied(seats, w, h, x, y, i-1, j-1)
     return count
 
+def update_seats(seats, leave, counter, w, h):
+    new_seats = [[] for y in range(h)]
+    for y in range(h):
+        for x in range(w):
+            if seats[y][x] == ".":
+                new_seats[y].append(".")
+                continue
+            count = counter(seats, w, h, x, y)
+            if count == 0 and seats[y][x] == "L":
+                new_seats[y].append("#")
+            elif count >= leave and seats[y][x] == "#":
+                new_seats[y].append("L")
+            else:
+                new_seats[y].append(seats[y][x])
+    return new_seats
+
 def find_stability(seats, leave, counter):
-    new_seats = deepcopy(seats)
-    old_seats = []
     height = len(seats)
     width = len(seats[0])
+    new_seats = [row[:] for row in seats]
+    old_seats = []
     while old_seats != new_seats:
-        old_seats = deepcopy(new_seats)
-        new_seats = [[] for y in range(height)]
-        for y in range(height):
-            for x in range(width):
-                if old_seats[y][x] == ".":
-                    new_seats[y].append(".")
-                    continue
-                count = counter(old_seats, width, height, x, y)
-                if count == 0 and old_seats[y][x] == "L":
-                    new_seats[y].append("#")
-                elif count >= leave and old_seats[y][x] == "#":
-                    new_seats[y].append("L")
-                else:
-                    new_seats[y].append(old_seats[y][x])
+        old_seats = [row[:] for row in new_seats]
+        new_seats = update_seats(old_seats, leave, counter, width, height)
     return sum(l.count("#") for l in new_seats)
 
 inp = read_input("input.txt")
