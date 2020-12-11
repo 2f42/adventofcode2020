@@ -2,7 +2,7 @@ def read_input(fname="input.txt"):
     out = []
     with open(fname) as f:
         for line in f.readlines():
-            out.append(list(line.strip()))
+            out.append(line.strip())
     return out
 
 def count_adjacent(seats, w, h, x, y):
@@ -38,28 +38,28 @@ def count_blockers(seats, w, h, x, y):
     return count
 
 def update_seats(seats, leave, counter, w, h):
-    new_seats = [[] for y in range(h)]
+    new_seats = ["" for y in range(h)]
     for y in range(h):
         for x in range(w):
             if seats[y][x] == ".":
-                new_seats[y].append(".")
+                new_seats[y] += "."
                 continue
             count = counter(seats, w, h, x, y)
             if count == 0 and seats[y][x] == "L":
-                new_seats[y].append("#")
+                new_seats[y] += "#"
             elif count >= leave and seats[y][x] == "#":
-                new_seats[y].append("L")
+                new_seats[y] += "L"
             else:
-                new_seats[y].append(seats[y][x])
+                new_seats[y] += seats[y][x]
     return new_seats
 
 def find_stability(seats, leave, counter):
     height = len(seats)
     width = len(seats[0])
-    new_seats = [row[:] for row in seats]
+    new_seats = seats
     old_seats = []
     while old_seats != new_seats:
-        old_seats = [row[:] for row in new_seats]
+        old_seats = new_seats
         new_seats = update_seats(old_seats, leave, counter, width, height)
     return sum(l.count("#") for l in new_seats)
 
